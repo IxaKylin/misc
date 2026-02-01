@@ -11,7 +11,7 @@
 ```bash
 git clone https://gitee.com/mirrors/busyboxsource
 cd busyboxsource
-export CROSS_COMPILE=
+export CROSS_COMPILE="/opt/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0/bin/riscv64-unknown-linux-gnu-"
 make defconfig
 make menuconfig
 # 这里启用了 Settings-->Build Options 里的 Build static binary (no shared libs) 选项
@@ -58,7 +58,7 @@ cd ..
 ### 常用命令
 
 ```bash
-make -j16 CROSS_COMPILE="/opt/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0/bin"/"riscv64-unknown-linux-gnu-" ARCH=riscv k230_canmv_defconfig ## 编译官方非SDK的内核
+make -j16 CROSS_COMPILE="/opt/toolchain/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0/bin/riscv64-unknown-linux-gnu-" ARCH=riscv k230_canmv_defconfig ## 编译官方非SDK的内核
 
 #打包 ulinux.bin
 make little-core-opensbi-clean

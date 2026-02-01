@@ -1,0 +1,86 @@
+/dts-v1/;
+
+/ {
+	model = "kendryte k230 canmv";
+	compatible = "kendryte,k230_canmv";
+	#address-cells = <0x02>;
+	#size-cells = <0x02>;
+
+	aliases {
+		uart0 = "/soc/serial@91400000";
+	};
+
+	chosen {
+		bootargs = [00];
+		stdout-path = "uart0:115200n8";
+	};
+
+	cpus {
+		#address-cells = <0x01>;
+		#size-cells = <0x00>;
+		timebase-frequency = <0x19bfcc0>;
+		u-boot,dm-pre-reloc;
+
+		cpu@0 {
+			device_type = "cpu";
+			reg = <0x00>;
+			status = "okay";
+			compatible = "riscv";
+			riscv,isa = "rv64imafdcvsu";
+			mmu-type = "riscv,sv39";
+			clock-frequency = <0x2faf0800>;
+			u-boot,dm-pre-reloc;
+			cpu0_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+	};
+
+	soc {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		compatible = "simple-bus";
+		ranges;
+		u-boot,dm-pre-reloc;
+
+		clint@f04000000 {
+                        compatible = "riscv,clint0";
+                        interrupts-extended = <&cpu0_intc  3 &cpu0_intc  7>;
+                        reg = <0xf 0x4000000 0x0 0x4000000>;
+                        clint,has-no-64bit-mmio;
+                };
+		
+		intc: interrupt-controller@f00000000 {
+			#interrupt-cells = <1>;
+			compatible = "riscv,plic0";
+			interrupt-controller;
+			interrupts-extended = <&cpu0_intc 11 &cpu0_intc  9>;
+			reg = <0xf 0x00000000 0x0 0x04000000>;
+			reg-names = "control";
+			riscv,max-priority = <7>;
+			riscv,ndev = <200>;
+		};
+		
+		serial@91400000 {
+			compatible = "snps,dw-apb-uart";
+			reg = <0x00 0x91400000 0x00 0x1000>;
+			interrupt-parent = <&intc>;
+			interrupts = <0x10>;
+			clock-frequency = <0x2faf080>;
+			clocks = <0x03>;
+			clock-names = "baudclk";
+			reg-shift = <0x02>;
+			reg-io-width = <0x04>;
+			current-speed = <0x1c200>;
+			status = "okay";
+		};
+
+	};
+
+	memory@0 {
+		device_type = "memory";
+		reg = <0x0 0x0 0x0 0x20000000>; // 512MB
+	};
+};

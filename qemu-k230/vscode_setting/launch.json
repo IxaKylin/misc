@@ -1,0 +1,130 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Debug QEMU K230 QTest",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/qemu-system-riscv64",
+            "args": [
+                "-qtest-log", "/dev/null",
+                "-display", "none",
+                "-audio", "none",
+                "-machine", "k230",
+                "-accel", "qtest"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "K230 SDK",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/qemu-system-riscv64",
+            "args": [
+                "-machine", "k230",
+                //"-bios", "/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/uboot/spl/u-boot-spl",
+                "-kernel", "/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/uboot/u-boot",
+                //"-kernel", "/root/tmp_workspace/u-boot/u-boot",
+                "-device", "loader,file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/images/little-core/ulinux.bin,addr=0xc000000",
+                //"-device", "loader,file=/root/tmp_workspace/linux/arch/riscv/boot/Image,addr=0xc000000",
+               // "-device", "loader,file=/root/tmp_workspace/linux/arch/riscv/boot/Image,addr=0x08100000",
+                //"-device", "loader,file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/images/little-core/k230_canmv.dtb,addr=0x807a610",
+                //"-drive", "file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/buildroot-ext/images/rootfs.cpio.gz,format=raw,if=none",
+                "-device", "loader,file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/images/little-core/initrd.img,addr=0xa100000",
+                //"-drive" , "file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/buildroot-ext/images/rootfs.cpio,format=raw,if=mtd",
+                "-append", "console=hvc0 earlycon=sbi loglevel=8",
+                "-nographic",
+                // "-s", "-S",
+                //"-d", "mmu,int",
+                // "-d", "tid,plugin",
+                // "-plugin", "/root/view-code/qemu-PCSX-2/build/contrib/plugins/libexeclog.so",
+                // "-D", "/root/cpu-%d.log",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "virt SDK",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/qemu-system-riscv64",
+            "args": [
+                "-machine", "virt",
+                //"-bios", "/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/buildroot-ext/images/fw_dynamic.bin",
+                //"-kernel", "/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/uboot/u-boot",
+                //"-kernel", "/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/buildroot-ext/images/fw_dynamic.bin",
+                "-kernel", "/root/tmp_workspace/u-boot/u-boot",
+                //"-device", "loader,file=/root/tmp_workspace/linux/arch/riscv/boot/Image,addr=0x80200000",
+                "-device", "loader,file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/images/little-core/Image,addr=0x80200000",
+               // "-device", "loader,file=/root/tmp_workspace/linux/arch/riscv/boot/Image,addr=0x08100000",
+                "-device", "loader,file=/root/tmp_workspace/virt.dtb,addr=0x8f73b6f0",
+                //"-device", "loader,file=/root/view-code/k230_sdk/output/k230_canmv_defconfig/little/buildroot-ext/images/rootfs.cpio.gz,addr=0xa100000",
+                "-append", "console=ttyS0 quiet oops=panic nokaslr",
+                "-nographic",
+                // "-s", "-S",
+                // "-d", "mmu,int",
+                // "-d", "tid,plugin",
+                // "-plugin", "/root/view-code/qemu-PCSX-2/build/contrib/plugins/libexeclog.so",
+                // "-D", "/root/cpu-%d.log",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "",
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}
